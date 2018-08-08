@@ -3,9 +3,9 @@ const mockData = require('./mockdata.js');
 
 
 const connection = mysql.createConnection({
-  host: 'database',
+  host: 'localhost',
   user: 'root',
-  password: 'dog',
+  password: '',
   database: 'rental_hosts',
   port: '3306',
 });
