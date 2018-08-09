@@ -11,8 +11,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('/api/about/hosts/:id', (req, res) => {
-  // console.log(req.params);
+app.get('/hosts/:id', (req, res) => {
+  console.log(req.params);
   db.selectHostInfo(+req.params.id, (err, result) => {
     if (err) {
       console.log(err);
@@ -22,8 +22,8 @@ app.get('/api/about/hosts/:id', (req, res) => {
   });
 });
 
-app.get('/api/about/reviews/:listingId', (req, res) => {
-  // console.log(req.params);
+app.get('/reviews/:listingId', (req, res) => {
+  console.log(req.params);
   db.reviewsForHost(+req.params.listingId, (err, result) => {
     if (err) {
       console.log(err);
@@ -33,7 +33,7 @@ app.get('/api/about/reviews/:listingId', (req, res) => {
   });
 });
 
-app.get('/api/about/neighborhood/:listingId', (req, res) => {
+app.get('/listings:listingId', (req, res) => {
   console.log(req.params);
   db.neighborhoodInfo(+req.params.listingId, (err, result) => {
     if (err) {
@@ -42,6 +42,18 @@ app.get('/api/about/neighborhood/:listingId', (req, res) => {
       res.send(JSON.stringify(result));
     }
   });
+});
+
+app.post('/listings', (req, res) => {
+  db.postListing();
+});
+
+app.put('/listings/:listingId', (req, res) => {
+  db.updateListing();
+});
+
+app.delete('/listings/:listingId', (req, res) => {
+  db.deleteListing();
 });
 
 app.listen(3001, () => {
