@@ -6,10 +6,10 @@ const hostsTable = function () {
   const hostData = fs.createWriteStream('./hostsData.csv');
   const hostString = 'id,firstName,lastName,city,state,country,joinDate,referencesCount,verified,description,responseRate,responseTime,language,email' + '\n';
   hostData.write(hostString);
-  let counter = 0;
-  while (counter < 10000000) {
+  let counter = 1;
+  while (counter <= 10000000) {
     let string = '';
-    for (let i = 0; i < 100000; i + 1) {
+    for (let i = 1; i <= 100000; i++) {
       string += `${counter},`;
       string += `${(faker.name.firstName())},`;
       string += `${(faker.name.lastName())},`;
@@ -31,7 +31,7 @@ const hostsTable = function () {
   hostData.end(function () {console.log('done')});
 };
 
-const listingsTable = function() {
+const listingsTable = function () {
   const inputStream = fs.createReadStream('./listings.csv', 'utf8');
   const listingData = fs.createWriteStream('./listingsData.csv');
   const listingsString = 'id,name,features,toDo,latitude,longitude' + '\n';
@@ -58,16 +58,17 @@ const reviewsTable = function () {
 
   reviewsData.write(reviewsString);
 
-  for (let i = 25000000; i < 30000000; i + 1) {
+  for (let i = 25000001; i <= 30000000; i++) {
 
     let string = '';
     string += `${i},`;
-    string += `${Math.floor(Math.random()*10000000)},`;
-    string += `${Math.floor(Math.random()*10000000)},`;
+    string += `${Math.floor(Math.random()*10000000) + 1},`;
+    string += `${Math.floor(Math.random()*10000000) + 1},`;
     string += `${Math.floor(Math.random()*5) + 1}` + '\n';
     reviewsData.write(string);
   }
 };
+
 // hostsTable();
 // listingsTable();
-// reviewsTable();
+reviewsTable();
