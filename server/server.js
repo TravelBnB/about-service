@@ -22,9 +22,9 @@ app.get('/hosts/:id', (req, res) => {
   });
 });
 
-app.get('/reviews/:listingId', (req, res) => {
+app.get('/reviews/:hostId', (req, res) => {
   console.log(req.params);
-  db.reviewsForHost(+req.params.listingId, (err, result) => {
+  db.reviewsForHost(+req.params.hostId, (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -33,7 +33,7 @@ app.get('/reviews/:listingId', (req, res) => {
   });
 });
 
-app.get('/listings:listingId', (req, res) => {
+app.get('/listings/:listingId', (req, res) => {
   console.log(req.params);
   db.neighborhoodInfo(+req.params.listingId, (err, result) => {
     if (err) {
@@ -44,16 +44,64 @@ app.get('/listings:listingId', (req, res) => {
   });
 });
 
+app.get('/reviews/:listingId', (req, res) => {
+  db.listingReviews(req.params.listingId, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(JSON.stringify(result));
+    }
+  });
+});
+
+app.get('/listings/:hostId', (req, res) => {
+  db.hostListings(req.params.hostId, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(JSON.stringify(result));
+    }
+  });
+});
+
+app.get('/hosts/listings/:reviewId', (req, res) => {
+  db.reviewHostListingInfo(req.params.reviewId, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(JSON.stringify(result));
+    }
+  });
+});
+
 app.post('/listings', (req, res) => {
-  db.postListing();
+  db.addListing(req.body.name, req.body.features, req.body.thingsToDo, req.body.latitude, req.body.longitude, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.sendStatus(201);
+    }
+  });
 });
 
 app.put('/listings/:listingId', (req, res) => {
-  db.updateListing();
+  db.updateListing(req.params.id, req.body.name, req.body.features, req.body.thingsToDo, req.body.latitude, req.body.longitude, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.sendStatus(200);
+    }
+  });
 });
 
 app.delete('/listings/:listingId', (req, res) => {
-  db.deleteListing();
+  db.deleteListing(req.params.id, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.sendStatus(200);
+    }
+  });
 });
 
 app.listen(3001, () => {
