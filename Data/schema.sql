@@ -33,3 +33,15 @@ CREATE TABLE IF NOT EXISTS reviews (
   rating INT NOT NULL,
   PRIMARY KEY (id)
 );
+
+\COPY hosts FROM 'hostsData.csv' DELIMITER ',' CSV HEADER;
+\COPY listings FROM 'listings.csv' DELIMITER ',' CSV HEADER;
+\COPY reviews from 'reviewsData1.csv' DELIMITER ',' CSV HEADER;
+\COPY reviews from 'reviewsData2.csv' DELIMITER ',' CSV HEADER;
+\COPY reviews from 'reviewsData3.csv' DELIMITER ',' CSV HEADER;
+\COPY reviews from 'reviewsData4.csv' DELIMITER ',' CSV HEADER;
+\COPY reviews from 'reviewsData5.csv' DELIMITER ',' CSV HEADER;
+\COPY reviews from 'reviewsData6.csv' DELIMITER ',' CSV HEADER;
+
+ALTER TABLE reviews ADD FOREIGN KEY (user_id) REFERENCES hosts (id);
+ALTER TABLE reviews ADD FOREIGN KEY (list_id) REFERENCES listings (id) ON DELETE CASCADE;
