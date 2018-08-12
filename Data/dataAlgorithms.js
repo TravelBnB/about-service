@@ -34,7 +34,7 @@ const hostsTable = function () {
 const listingsTable = function () {
   const inputStream = fs.createReadStream('./listings.csv', 'utf8');
   const listingData = fs.createWriteStream('./listingsData.csv');
-  const listingsString = 'id,name,features,toDo,latitude,longitude' + '\n';
+  const listingsString = 'id,name,hostId,features,toDo,latitude,longitude' + '\n';
 
   listingData.write(listingsString);
 
@@ -42,6 +42,7 @@ const listingsTable = function () {
     let string = '';
     string += `${row[0]},`;
     string += `${row[1]},`;
+    string += `${Math.floor(Math.random()*10000000) + 1},`;
     string += `${(faker.lorem.word())},`;
     string += `${(faker.lorem.words())},`;
     string += `${(faker.address.latitude())},`;
@@ -69,6 +70,24 @@ const reviewsTable = function () {
   }
 };
 
+const skewReviews = function () {
+  const reviewsData = fs.createWriteStream('./reviewsDataSkewed4.csv');
+  const reviewsString = 'id,hostId,listId,rating' + '\n';
+
+  reviewsData.write(reviewsString);
+
+  for (let i = 45000001; i <= 50000000; i++) {
+
+    let string = '';
+    string += `${i},`;
+    string += `${Math.floor(Math.random()*500000) + 9500000},`;
+    string += `${Math.floor(Math.random()*500000) + 9500000},`;
+    string += `${Math.floor(Math.random()*5) + 1}` + '\n';
+    reviewsData.write(string);
+  }
+};
+
 // hostsTable();
 // listingsTable();
-reviewsTable();
+// reviewsTable();
+skewReviews();
