@@ -67,7 +67,7 @@ const reviewHostListingInfo = (id, callback) => {
 };
 
 const addListing = (name, features, thingsToDo, latitude, longitude, callback) => {
-  const query = 'insert into listings (name, features, things_to_do, lat_location, lon_location) values (?, ?, ?, ?, ?);';
+  const query = 'insert into listings (name, host_id, features, things_to_do, lat_location, lon_location) values (?, ?, ?, ?, ?);';
   connection.query(query, [name, features, thingsToDo, latitude, longitude], (err, result) => {
     if (err) {
       console.log(err);
@@ -77,8 +77,8 @@ const addListing = (name, features, thingsToDo, latitude, longitude, callback) =
   });
 };
 
-const updateListing = (id, name, features, thingsToDo, latitude, longitude, callback) => {
-  const query = `update listings set name = ${name}, features = ${features}, things_to_do = ${thingsToDo}, lat_location = ${latitude}, lon_location = ${longitude} where id = ${id};`;
+const updateListing = (id, name, hostId, features, thingsToDo, latitude, longitude, callback) => {
+  const query = `update listings set name = ${name}, host_id = ${hostId}, features = ${features}, things_to_do = ${thingsToDo}, lat_location = ${latitude}, lon_location = ${longitude} where id = ${id};`;
   connection.query(query, (err, result) => {
     if (err) {
       console.log(err);
