@@ -1,3 +1,4 @@
+const newRelic = require('newrelic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -28,7 +29,7 @@ app.get('/api/about/reviews/:hostId', (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.send(JSON.stringify(result.rows));
+      res.send(JSON.stringify(result));
     }
   });
 });

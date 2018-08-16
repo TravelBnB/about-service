@@ -1,3 +1,4 @@
 node_modules
+server/newrelic_agent.log
 client/config/googleMap.js
 *.csv
