@@ -75,7 +75,7 @@ app.get('/hosts/listings/:reviewId', (req, res) => {
 });
 
 app.post('/listings', (req, res) => {
-  db.addListing(req.body.name, req.body.features, req.body.thingsToDo, req.body.latitude, req.body.longitude, (err) => {
+  db.addListing(req.body.name, req.body.hostId, req.body.features, req.body.thingsToDo, req.body.latitude, req.body.longitude, (err) => {
     if (err) {
       console.log(err);
     } else {
@@ -85,7 +85,7 @@ app.post('/listings', (req, res) => {
 });
 
 app.put('/listings/:listingId', (req, res) => {
-  db.updateListing(req.params.id, req.body.name, req.body.features, req.body.thingsToDo, req.body.latitude, req.body.longitude, (err) => {
+  db.updateListing(req.params.id, req.body.hostId, req.body.name, req.body.features, req.body.thingsToDo, req.body.latitude, req.body.longitude, (err) => {
     if (err) {
       console.log(err);
     } else {

@@ -87,7 +87,21 @@ const skewReviews = function () {
   }
 };
 
+const postQuery = function () {
+  for (var i = 0; i < 100; i++) {
+    console.log(`insert into listings (name, host_id, features, things_to_do, lat_location, lon_location) values ('${faker.lorem.word()}', ${Math.floor(Math.random() * 10000000) + 1}, '${faker.lorem.word()}', '${faker.lorem.word()}', ${faker.address.latitude()}, ${faker.address.longitude()});`);
+  }
+};
+
+const updateQuery = function () {
+  for (var i = 0; i < 100; i++) {
+    console.log(`update listings set name = '${faker.lorem.word()}', host_id = ${Math.floor(Math.random() * 10000000 + 1)}, features = '${faker.lorem.word()}', things_to_do = '${faker.lorem.word()}', lat_location = ${faker.address.latitude()}, lon_location = ${faker.address.longitude()} where id = ${Math.floor(Math.random() * 10000000 + 1)};`);
+  }
+};
+
 // hostsTable();
 // listingsTable();
 // reviewsTable();
-skewReviews();
+// skewReviews();
+// postQuery();
+updateQuery();
