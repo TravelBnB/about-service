@@ -1,8 +1,15 @@
+const redis = require('redis');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 // need to create a file to select data
 const db = require('../db/queries.js');
+
+const client = redis.createClient();
+
+client.on('connect', () => {
+  console.log('Redis client connected');
+});
 
 const app = express();
 
@@ -12,35 +19,71 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/api/about/hosts/:id', (req, res) => {
-  console.log(req.params);
-  db.selectHostInfo(+req.params.id, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(JSON.stringify(result.rows));
+  const id = req.params.id;
+  const hostsKey = `${id}:host`;
+
+  client.hgetall(hostsKey, (hgetallErr, host) => {
+    if (host) {
+      return res.json(host);
     }
+    db.selectHostInfo(id, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        client.hmset(hostsKey, result.rows[0], (hmSetError) => {
+          if (hmSetError) {
+            console.log(hmSetError);
+          }
+        });
+        res.json(result.rows[0]);
+      }
+    });
   });
 });
 
 app.get('/api/about/reviews/:hostId', (req, res) => {
-  console.log(req.params);
-  db.reviewsForHost(+req.params.hostId, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(JSON.stringify(result.rows));
+  const id = req.params.hostId;
+  const reviewsKey = `${id}:reviews`;
+
+  client.get(reviewsKey, (hgetallErr, reviews) => {
+    if (reviews) {
+      return res.json(reviews);
     }
+    db.reviewsForHost(id, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        client.set(reviewsKey, result.rowCount, (hmSetError) => {
+          if (hmSetError) {
+            console.log(hmSetError);
+          }
+        });
+        res.send(JSON.stringify(result.rowCount));
+      }
+    });
   });
 });
 
 app.get('/api/about/neighborhood/:listingId', (req, res) => {
-  console.log(req.params);
-  db.neighborhoodInfo(+req.params.listingId, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(JSON.stringify(result.rows));
+  const id = req.params.listingId;
+  const listingsKey = `${id}:listing`;
+
+  client.hgetall(listingsKey, (hgetallErr, listing) => {
+    if (listing) {
+      return res.json(listing);
     }
+    db.neighborhoodInfo(id, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        client.hmset(listingsKey, result.rows[0], (hmSetError) => {
+          if (hmSetError) {
+            console.log(hmSetError);
+          }
+        });
+        res.json(result.rows[0]);
+      }
+    });
   });
 });
 
