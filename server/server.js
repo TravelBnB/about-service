@@ -35,6 +35,8 @@ app.get('/api/about/hosts/:id', (req, res) => {
             console.log(hmSetError);
           }
         });
+
+        client.expire(hostsKey, 86400);
         res.json(result.rows[0]);
       }
     });
@@ -58,6 +60,8 @@ app.get('/api/about/reviews/:hostId', (req, res) => {
             console.log(hmSetError);
           }
         });
+
+        client.expire(reviewsKey, 86400);
         res.send(JSON.stringify(result.rowCount));
       }
     });
@@ -81,39 +85,85 @@ app.get('/api/about/neighborhood/:listingId', (req, res) => {
             console.log(hmSetError);
           }
         });
+        client.expire(listingsKey, 86400);
         res.json(result.rows[0]);
       }
     });
   });
 });
 
-app.get('/api/about/reviews/:listingId', (req, res) => {
-  db.listingReviews(req.params.listingId, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(JSON.stringify(result.rows));
+app.get('/api/about/ratings/:listingId', (req, res) => {
+  const id = req.params.listingId;
+  const ratingsKey = `${id}:ratings`;
+
+  client.get(ratingsKey, (error, ratings) => {
+    if (ratings) {
+      return res.json(JSON.parse(ratings));
     }
+    db.listingReviews(req.params.listingId, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        client.set(ratingsKey, JSON.stringify(result.rows), (setError) => {
+          if (setError) {
+            console.log(setError);
+          }
+        });
+
+        client.expire(ratingsKey, 86400);
+        res.json(result.rows);
+      }
+    });
   });
 });
 
 app.get('/api/about/listings/:hostId', (req, res) => {
-  db.hostListings(req.params.hostId, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(JSON.stringify(result.rows));
+  const id = req.params.hostId;
+  const listingsKey = `${id}:listingnames`;
+
+  client.get(listingsKey, (error, listingnames) => {
+    if (listingnames) {
+      return res.json(JSON.parse(listingnames));
     }
+    db.hostListings(req.params.hostId, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        client.set(listingsKey, JSON.stringify(result.rows), (setError) => {
+          if (setError) {
+            console.log(setError);
+          }
+        });
+
+        client.expire(listingsKey, 86400);
+        res.json(result.rows);
+      }
+    });
   });
 });
 
 app.get('/api/about/hosts/listings/:reviewId', (req, res) => {
-  db.reviewHostListingInfo(req.params.reviewId, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(JSON.stringify(result.rows));
+  const id = req.params.reviewId;
+  const hostListingKey = `${id}:hostlistinginginfo`;
+
+  client.hgetall(hostListingKey, (hgetallErr, hostlistingInfo) => {
+    if (hostlistingInfo) {
+      return res.json(hostlistingInfo);
     }
+    db.reviewHostListingInfo(id, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        client.hmset(hostListingKey, result.rows[0], (hmSetError) => {
+          if (hmSetError) {
+            console.log(hmSetError);
+          }
+        });
+
+        client.expire(hostListingKey, 86400);
+        res.json(result.rows[0]);
+      }
+    });
   });
 });
 
@@ -150,7 +200,6 @@ app.delete('/api/about/listings/:listingId', (req, res) => {
 app.listen(3001, () => {
   console.log('Server started on 3001');
 });
-
 
 // const express = require('express');
 // const morgan = require('morgan');
