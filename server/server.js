@@ -1,3 +1,4 @@
+const newRelic = require('newrelic');
 const redis = require('redis');
 const express = require('express');
 const bodyParser = require('body-parser');
