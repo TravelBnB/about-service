@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  about-service:
+    image: allantzhao/aboutservice:server1v4
+    environment:
+      - REDIS_URL=redis://redis
+    ports:
+      - '3001:3001'
+
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ../data/redis:/data

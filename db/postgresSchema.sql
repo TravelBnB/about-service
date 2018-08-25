@@ -1,3 +1,9 @@
+DROP DATABASE IF EXISTS aboutdb;
+
+CREATE DATABASE aboutdb;
+
+\connect aboutdb;
+
 CREATE TABLE IF NOT EXISTS hosts (
   id SERIAL,
   first_name varchar(255) NOT NULL,
@@ -35,18 +41,18 @@ CREATE TABLE IF NOT EXISTS reviews (
   PRIMARY KEY (id)
 );
 
-\COPY hosts FROM 'hostsData.csv' DELIMITER ',' CSV HEADER;
-\COPY listings FROM 'listingsData.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsData1.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsData2.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsData3.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsData4.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsData5.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsData6.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsDataSkewed1.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsDataSkewed2.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsDataSkewed3.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews from 'reviewsDataSkewed4.csv' DELIMITER ',' CSV HEADER;
+-- \COPY hosts FROM 'hostsData.csv' DELIMITER ',' CSV HEADER;
+-- \COPY listings FROM 'listingsData.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsData1.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsData2.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsData3.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsData4.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsData5.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsData6.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsDataSkewed1.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsDataSkewed2.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsDataSkewed3.csv' DELIMITER ',' CSV HEADER;
+-- \COPY reviews FROM 'reviewsDataSkewed4.csv' DELIMITER ',' CSV HEADER;
 
 ALTER TABLE listings ADD FOREIGN KEY (host_id) REFERENCES hosts (id);
 ALTER TABLE reviews ADD FOREIGN KEY (user_id) REFERENCES hosts (id);
