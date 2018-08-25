@@ -3,7 +3,9 @@ const pg = require('pg');
 // const conString = 'postgresql://localhost/aboutData';
 
 const connection = new pg.Pool({
-  database: 'aboutData',
+  user: 'postgres',
+  host: 'ec2-54-167-215-178.compute-1.amazonaws.com',
+  database: 'aboutdb',
 });
 connection.connect();
 

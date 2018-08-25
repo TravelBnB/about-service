@@ -6,7 +6,8 @@ const path = require('path');
 // need to create a file to select data
 const db = require('../db/queries.js');
 
-const client = redis.createClient();
+const REDIS_URL = process.env.REDIS_URL;
+const client = redis.createClient(REDIS_URL);
 
 client.on('connect', () => {
   console.log('Redis client connected');
