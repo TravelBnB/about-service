@@ -35,13 +35,10 @@ class App extends React.Component {
   }
 
   getHostInfo() {
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
     $.get(`/api/about/hosts/${this.state.id}`, (data) => {
-      console.log(JSON.parse(data)[0]);
-      this.setState({ host: JSON.parse(data)[0] });
-      this.setState({ joinMonth: monthNames[Number(this.state.host.joined_in_date.split('-')[1]) - 1] });
-      this.setState({ joinYear: this.state.host.joined_in_date.split('-')[0] });
+      this.setState({ host: data });
+      this.setState({ joinMonth: this.state.host.joined_in_date.split(' ')[1] });
+      this.setState({ joinYear: this.state.host.joined_in_date.split(' ')[3] });
     });
   }
 
@@ -53,30 +50,31 @@ class App extends React.Component {
 
   getNeighborhoodInfo() {
     $.get(`/api/about/neighborhood/${this.state.listingId}`, (data) => {
-      console.log(JSON.parse(data));
-      let neighborhoodInfo = JSON.parse(data);
-      let lon_location = neighborhoodInfo[0].lon_location;
-      let lat_location = neighborhoodInfo[0].lat_location;
+      let neighborhoodInfo = data;
+      let lon_location = neighborhoodInfo.lon_location;
+      let lat_location = neighborhoodInfo.lat_location;
       // let location = {lon_location, lat_location};
-      this.setState({ neighborhoodInfo: neighborhoodInfo[0] });
+      this.setState({ neighborhoodInfo: neighborhoodInfo });
     });
   }
 
   reviewOrReviews() {
-    if (this.state.numsOfReviews <= 1) {
+    if (this.state.numsOfReviews === 1) {
       this.setState({ reviewWording: 'review' });
+    } else {
+      this.setState({ reviewWording: 'reviews' });
     }
   }
 
   verifiedOrNot() {
     if (this.state.host.verified === 1) {
-      return <span>Verified</span>
+      return <span>Verified</span>;
     }
   }
 
   responseTimeConvertor() {
     if (this.state.host.response_time <= 59) {
-      return <span className="boldingWords">Within an hour</span>
+      return <span className="boldingWords">Within an hour</span>;
     }
   }
 

@@ -1,0 +1,41 @@
+config:
+  target: 'http://localhost:3001'
+  phases:
+    - duration: 60  
+      arrivalRate: 10
+  defaults:
+    headers:
+      x-my-service-auth: '987401838271002188298567'
+  variables:
+    reviewIds:
+      - [29234823, 19334823, 29234823, 19334823, 17239412, 28234192]
+    hostIds:
+      - [8989888, 7812312, 9123123, 9823483, 8989888, 9823483, 8989888, 9823483, 9123123, 9823483, 9823483, 9123123]
+    listingIds:
+      - [9234823, 9534823, 9334823, 8234823, 7534823, 9334823, 9534823, 9334823, 9534823, 9334823, 9534823, 9334823, 9534823, 9334823]
+scenarios:
+  - flow:
+      - loop:
+          - get:
+              url: "/api/about/hosts/listings/{{ $loopElement }}"
+        over: reviewIds
+      - loop:
+          - get:
+              url: "/api/about/hosts/{{ $loopElement }}"
+        over: hostIds
+      - loop:
+          - get:
+              url: "/api/about/reviews/{{ $loopElement }}"
+        over: hostIds
+      - loop:
+          - get:
+              url: "/api/about/neighborhood/{{ $loopElement }}"
+        over: listingIds
+      - loop:
+          - get:
+              url: "/api/about/reviews/{{ $loopElement }}"
+        over: listingIds
+      - loop:
+          - get:
+              url: "/api/about/listings/{{ $loopElement }}"
+        over: hostIds

@@ -1,9 +1,10 @@
 const pg = require('pg');
 
-const conString = 'postgresql://localhost/aboutData';
+// const conString = 'postgresql://localhost/aboutData';
 
-const connection = new pg.Client(conString);
-
+const connection = new pg.Pool({
+  database: 'aboutData',
+});
 connection.connect();
 
 module.exports = connection;
