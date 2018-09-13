@@ -1,11 +1,7 @@
-#CRUD API ENDPOINTS
+Project Description
 
-GET /hosts/id
+System design of the About section microservice of a housing rental application.
 
-GET /listings/listingId
+Built using Node, Express, Postgres, Redis, Docker, AWS EC2, and Nginx.
 
-POST /listings
-
-PUT /listings/:listingId
-
-DELETE /listings/:listingId
+Horizontally scaled to handle over 2000 requests per second.
